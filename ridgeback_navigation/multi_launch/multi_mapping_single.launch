@@ -1,0 +1,27 @@
+<launch>
+  <arg name="robot_name" default="rb_0" />
+
+  <group ns="$(arg robot_name)">
+    <!--- Run karto -->
+    <include file="$(find ridgeback_navigation)/multi_launch/include/multi_karto.launch">
+      <arg name="set_base_frame" value="$(arg robot_name)/base_link" />
+      <arg name="set_odom_frame" value="$(arg robot_name)/odom" />
+      <arg name="set_map_frame" value="$(arg robot_name)/map" />
+      <arg name="set_scan_topic" value="scan_full_filtered" />
+    </include>
+
+    <!--- Run gmapping -->
+    <!-- <include file="$(find ridgeback_navigation)/multi_launch/include/multi_karto.launch">
+      <arg name="set_base_frame" value="$(arg robot_name)/base_link" />
+      <arg name="set_odom_frame" value="$(arg robot_name)/odom" />
+      <arg name="set_map_frame" value="$(arg robot_name)/map" />
+      <arg name="set_scan_topic" value="front/scan" />
+    </include> -->
+
+    <!--- Run Move Base -->
+    <include file="$(find ridgeback_navigation)/multi_launch/include/multi_move_base.launch">
+      <arg name="params_file_name" value="$(arg robot_name)" />
+    </include>
+  </group>
+
+</launch>

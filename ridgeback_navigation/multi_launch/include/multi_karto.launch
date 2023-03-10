@@ -1,0 +1,16 @@
+<launch>
+  <!-- Arguments -->
+  <arg name="set_base_frame" default="base_link" />
+  <arg name="set_odom_frame" default="odom" />
+  <arg name="set_map_frame" default="map" />
+  <arg name="set_scan_topic" default="scan_full_filtered" />
+
+  <!-- slam_karto -->
+  <node pkg="slam_karto" type="slam_karto" name="ridgeback_slam_karto" output="screen" respawn="true">
+    <param name="base_frame" value="$(arg set_base_frame)" />
+    <param name="odom_frame" value="$(arg set_odom_frame)" />
+    <param name="map_frame" value="$(arg set_map_frame)" />
+    <rosparam command="load" file="$(find ridgeback_navigation)/config/karto_mapper_params.yaml" />
+    <remap from="scan" to="$(arg set_scan_topic)" />
+  </node>
+</launch>

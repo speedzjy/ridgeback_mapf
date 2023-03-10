@@ -1,0 +1,20 @@
+<!-- DESCRITPION -->
+
+<launch>
+  <arg name="tf_prefix" default="" />
+
+	<!-- 加入过滤掉激光扫到的航发平台内部的杂点功能 -->
+	<node pkg="ira_laser_tools" name="laserscan_multi_merger" type="laserscan_multi_merger" output="screen">
+		<param name="destination_frame" value="$(arg tf_prefix)/front_laser"/>
+		<param name="cloud_destination_topic" value="/$(arg tf_prefix)/merged_cloud"/>
+		<param name="scan_destination_topic" value="/$(arg tf_prefix)/scan_full"/>
+		<param name="laserscan_topics" value ="/$(arg tf_prefix)/front/scan /$(arg tf_prefix)/rear/scan" />
+		<!-- LIST OF THE LASER SCAN TOPICS TO SUBSCRIBE -->
+		<param name="angle_min" value="-3.1415926"/>
+		<param name="angle_max" value="3.1415926"/>
+		<param name="angle_increment" value="0.003"/>
+		<param name="scan_time" value="0.03"/>
+		<param name="range_min" value="0.10"/>
+		<param name="range_max" value="40.0"/>
+	</node>
+</launch>

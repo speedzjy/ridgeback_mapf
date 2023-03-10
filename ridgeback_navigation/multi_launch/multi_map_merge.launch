@@ -1,0 +1,45 @@
+<launch>
+  <arg name="first_rb" default="rb_0" />
+  <arg name="second_rb" default="rb_1" />
+
+  <arg name="first_rb_x_pos" default="0.0" />
+  <arg name="first_rb_y_pos" default="0.0" />
+  <arg name="first_rb_z_pos" default=" 0" />
+  <arg name="first_rb_yaw" default=" 0.0" />
+
+  <arg name="second_rb_x_pos" default=" -5" />
+  <arg name="second_rb_y_pos" default="-5" />
+  <arg name="second_rb_z_pos" default=" 0" />
+  <arg name="second_rb_yaw" default=" 0.0" />
+
+  <group ns="$(arg first_rb)/map_merge">
+    <param name="init_pose_x" value="$(arg first_rb_x_pos)" />
+    <param name="init_pose_y" value="$(arg first_rb_y_pos)" />
+    <param name="init_pose_z" value="$(arg first_rb_z_pos)" />
+    <param name="init_pose_yaw" value="$(arg first_rb_yaw)" />
+  </group>
+
+  <group ns="$(arg second_rb)/map_merge">
+    <param name="init_pose_x" value="$(arg second_rb_x_pos)" />
+    <param name="init_pose_y" value="$(arg second_rb_y_pos)" />
+    <param name="init_pose_z" value="$(arg second_rb_z_pos)" />
+    <param name="init_pose_yaw" value="$(arg second_rb_yaw)" />
+    <!-- <param name="init_pose_yaw" value="$(arg second_rb_yaw)" /> -->
+  </group>
+
+  <node pkg="multirobot_map_merge" type="map_merge" respawn="false" name="map_merge" output="screen">
+    <param name="robot_map_topic" value="map" />
+    <param name="robot_namespace" value="" />
+    <param name="merged_map_topic" value="merged_map" />
+    <param name="world_frame" value="map" />
+    <param name="known_init_poses" value="true" />
+    <param name="merging_rate" value="0.5" />
+    <!-- 寻找新机器人的频率 -->
+    <param name="discovery_rate" value="1.0" />
+    <param name="estimation_rate" value="0.1" />
+    <param name="estimation_confidence" value="1.0" />
+  </node>
+
+  <node pkg="tf" type="static_transform_publisher" name="world_to_$(arg first_rb)_tf_broadcaster" args="$(arg first_rb_x_pos) $(arg first_rb_y_pos) $(arg first_rb_z_pos) 0 0 $(arg first_rb_yaw) /map /$(arg first_rb)/map 100" />
+  <node pkg="tf" type="static_transform_publisher" name="world_to_$(arg second_rb)_tf_broadcaster" args="$(arg second_rb_x_pos) $(arg second_rb_y_pos) $(arg second_rb_z_pos) 0 0 $(arg second_rb_yaw) /map /$(arg second_rb)/map 100" />
+</launch><!-- http://wiki.ros.org/multirobot_map_merge -->

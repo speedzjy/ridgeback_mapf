@@ -1,0 +1,93 @@
+<launch>
+  <arg name="use_sim_time" default="true" />
+  <arg name="gui" default="true" />
+  <arg name="headless" default="false" />
+  <arg name="world_name" default="$(find ridgeback_navigation)/worlds/long_corridor.world" />
+  <!-- <arg name="world_name" default="$(find ridgeback_gazebo)/worlds/ridgeback_race.world" /> -->
+
+  <!-- Robot Spawn Pose -->
+  <arg name="first_rb" default="rb_0" />
+  <arg name="second_rb" default="rb_1" />
+
+  <arg name="first_rb_x" default="0" />
+  <arg name="first_rb_y" default="0" />
+  <arg name="first_rb_z" default="0.1" />
+  <arg name="first_rb_yaw" default="0" />
+  <arg name="first_rb_joystick" default="false" />
+
+  <arg name="second_rb_x" default="-4" />
+  <arg name="second_rb_y" default="0" />
+  <arg name="second_rb_z" default="0.1" />
+  <arg name="second_rb_yaw" default="0" />
+  <arg name="second_rb_joystick" default="false" />
+
+  <!-- Configuration of Ridgeback which you would like to simulate.
+       See ridgeback_description for details. -->
+  <arg name="config" default="$(optenv RIDGEBACK_CONFIG dual_sick_lasers)" />
+
+  <!-- Launch Gazebo with the specified world -->
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="debug" value="0" />
+    <arg name="gui" value="$(arg gui)" />
+    <arg name="use_sim_time" value="$(arg use_sim_time)" />
+    <arg name="headless" value="$(arg headless)" />
+    <arg name="world_name" value="$(arg world_name)" />
+    <arg name="paused" value="false" />
+  </include>
+
+  <!-- robot-1 -->
+  <group ns="$(arg first_rb)">
+    <include file="$(find ridgeback_test)/launch/spawn_ridgeback.launch">
+      <arg name="config" value="$(arg config)" />
+      <arg name="x" value="$(arg first_rb_x)" />
+      <arg name="y" value="$(arg first_rb_y)" />
+      <arg name="z" value="$(arg first_rb_z)" />
+      <arg name="yaw" value="$(arg first_rb_yaw)" />
+      <arg name="joystick" value="$(arg first_rb_joystick)" />
+      <arg name="tf_prefix" value="$(arg first_rb)" />
+      <arg name="rb_name" value="$(arg first_rb)" />
+      <arg name="control_file" value="$(find ridgeback_control)/config/control_0.yaml" />
+    </include>
+    <!-- merge laser cloud -->
+    <include file="$(find ira_laser_tools)/launch/laserscan_multi_merger.launch">
+      <arg name="tf_prefix" value="$(arg first_rb)" />
+    </include>
+    <!-- laser cloud filter-->
+    <include file="$(find laser_filters)/launch/ridgeback_filter.launch">
+      <arg name="tf_prefix" value="$(arg first_rb)" />
+    </include>
+
+    <!-- 将 odom | /ridgeback_controller/odom | imu/data 的 frame 改成有前缀的 -->
+    <node name="odom_to_odom_correct" pkg="ridgeback_test" type="odom_to_odom_correct_node" output="screen">
+      <param name="tf_prefix" value="$(arg first_rb)" />
+    </node>
+  </group>
+
+  <!-- robot-2 -->
+  <group ns="$(arg second_rb)">
+    <include file="$(find ridgeback_test)/launch/spawn_ridgeback.launch">
+      <arg name="config" value="$(arg config)" />
+      <arg name="x" value="$(arg second_rb_x)" />
+      <arg name="y" value="$(arg second_rb_y)" />
+      <arg name="z" value="$(arg second_rb_z)" />
+      <arg name="yaw" value="$(arg second_rb_yaw)" />
+      <arg name="joystick" value="$(arg second_rb_joystick)" />
+      <arg name="tf_prefix" value="$(arg second_rb)" />
+      <arg name="rb_name" value="$(arg second_rb)" />
+      <arg name="control_file" value="$(find ridgeback_control)/config/control_1.yaml" />
+    </include>
+
+    <include file="$(find ira_laser_tools)/launch/laserscan_multi_merger.launch">
+      <arg name="tf_prefix" value="$(arg second_rb)" />
+    </include>
+
+    <include file="$(find laser_filters)/launch/ridgeback_filter.launch">
+      <arg name="tf_prefix" value="$(arg second_rb)" />
+    </include>
+
+    <node name="odom_to_odom_correct" pkg="ridgeback_test" type="odom_to_odom_correct_node" output="screen">
+      <param name="tf_prefix" value="$(arg second_rb)" />
+    </node>
+  </group>
+
+</launch>

@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<launch>
+
+  <include file="$(find ridgeback_navigation)/multi_launch/multi_nav_single.launch">
+    <arg name="robot_name" value="rb_0" />
+    <arg name="initial_pose_x" value="0" />
+    <arg name="initial_pose_y" value="0" />
+    <arg name="initial_pose_a" value="0" />
+  </include>
+
+  <include file="$(find ridgeback_navigation)/multi_launch/multi_nav_single.launch">
+    <arg name="robot_name" value="rb_1" />
+    <arg name="initial_pose_x" value="5" />
+    <arg name="initial_pose_y" value="-10" />
+    <arg name="initial_pose_a" value="0" />
+  </include>
+
+  <!-- rviz -->
+  <node pkg="rviz" type="rviz" name="rviz" required="true" args="-d $(find ridgeback_navigation)/rviz/multi_ridgeback_navigation.rviz" />
+</launch>

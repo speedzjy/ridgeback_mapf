@@ -1,0 +1,9 @@
+<launch>
+  <arg name="tf_prefix" default="" />
+
+  <node pkg="laser_filters" type="scan_to_scan_filter_chain" output="screen" name="laser_filter_node">
+        <remap from="scan" to="/$(arg tf_prefix)/scan_full" />
+        <remap from="scan_filtered" to="/$(arg tf_prefix)/scan_full_filtered" />
+        <rosparam command="load" file="$(find laser_filters)/launch/ridgeback_filter.yaml" />
+  </node>
+  </launch>

@@ -1,0 +1,27 @@
+<launch>
+  <arg name="scan_topic" default="scan_full_filtered" />
+
+  <!-- Run the map server -->
+  <arg name="map_file" default="$(find ridgeback_navigation)/maps/rglab0302.yaml" />
+  <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)" />
+
+  <!--- Run AMCL -->
+  <arg name="initial_pose_x" default="0.0" />
+  <arg name="initial_pose_y" default="0.0" />
+  <arg name="initial_pose_a" default="0.0" />
+  <include file="$(find ridgeback_navigation)/launch/include/amcl.launch">
+    <arg name="scan_topic" value="$(arg scan_topic)" />
+    <arg name="initial_pose_x" value="$(arg initial_pose_x)" />
+    <arg name="initial_pose_y" value="$(arg initial_pose_y)" />
+    <arg name="initial_pose_a" value="$(arg initial_pose_a)" />
+  </include>
+
+  <!--- Run Move Base -->
+  <include file="$(find ridgeback_navigation)/launch/include/move_base.launch" />
+
+  <!--- Run Rviz -->
+  <include file="$(find ridgeback_viz)/launch/view_robot.launch">
+    <arg name="config" value="localization" />
+  </include>
+
+</launch>

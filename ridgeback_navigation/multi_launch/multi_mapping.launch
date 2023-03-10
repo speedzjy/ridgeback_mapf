@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<launch>
+  <!-- <include file="$(find ridgeback_navigation)/multi_launch/multi_map_merge.launch">
+  </include> -->
+
+  <include file="$(find ridgeback_navigation)/multi_launch/multi_mapping_single.launch">
+    <arg name="robot_name" value="rb_0" />
+  </include>
+
+  <include file="$(find ridgeback_navigation)/multi_launch/multi_mapping_single.launch">
+    <arg name="robot_name" value="rb_1" />
+  </include>
+
+  <!-- rviz -->
+  <node pkg="rviz" type="rviz" name="rviz" required="true" args="-d $(find ridgeback_navigation)/rviz/multi_ridgeback_slam.rviz" />
+</launch>

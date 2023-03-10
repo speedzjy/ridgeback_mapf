@@ -1,0 +1,25 @@
+<launch>
+
+  <node pkg="slam_karto" type="slam_karto" name="slam_karto" output="screen">
+    <remap from="scan" to="/scan_full_filtered"/>
+    <param name="odom_frame" value="odom"/>
+    <param name="map_update_interval" value="5"/>
+    <param name="resolution" value="0.02"/>
+  </node>
+
+  <node pkg="slam_karto" type="slam_karto" name="slam_karto_low_resolution" output="screen">
+    <remap from="scan" to="/scan_full_filtered"/>
+    <remap from="map" to="/map_low_resolution"/>
+    <param name="odom_frame" value="odom"/>
+    <param name="map_update_interval" value="5"/>
+    <param name="resolution" value="1.2"/>
+  </node>
+
+  <!--- Run Move Base -->
+  <include file="$(find ridgeback_navigation)/launch/include/move_base.launch" />
+
+  <!--- Run Rviz -->
+  <include file="$(find ridgeback_viz)/launch/view_robot.launch">
+    <arg name="config" value="gmapping" />
+  </include>
+</launch>
