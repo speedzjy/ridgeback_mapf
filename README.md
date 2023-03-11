@@ -10,7 +10,7 @@
 
 This is a test case repository for [mapf_ros](https://github.com/speedzjy/mapf_ros) package.
 
-The robot used for the simulation test is **ridgeback**, the official website address is at [https://clearpathrobotics.com/assets/guides/melodic/ridgeback/index.html](https://clearpathrobotics.com/assets/guides/melodic/ridgeback/index.html). The official tutorial introduces the mapping and planning operations of a single robot in detail. After you are familiar with the process, you can clone this repository for multi-robot testing.
+The robot used for the simulation test is **ridgeback**, which supports **omnidirectional** movement, the official website address is at [https://clearpathrobotics.com/assets/guides/melodic/ridgeback/index.html](https://clearpathrobotics.com/assets/guides/melodic/ridgeback/index.html). The official tutorial introduces the mapping and planning operations of a single robot in detail. After you are familiar with the process, you can clone this repository for multi-robot testing.
 
 
 # Dependences
@@ -48,17 +48,23 @@ roslaunch mapf_base mapf_example.launch
   <img src='./doc/quickstart.png'/>
 </div>
 
-As shown in the figure, the first four buttons are traditional navigation buttons, which are used to control the positioning and movement of the two robots, and the last two buttons are used to send mapf targets to the mapf_base node.
+As shown in the figure, the first four buttons in rviz are traditional navigation buttons, which are used to control the positioning and movement of the two robots, and the last two buttons are used to send mapf targets to the mapf_base node.
+
+<div align='center'>
+  <img src='./doc/goal_transformer.png'/>
+</div>
 
 After sending the mapf target point using the last two buttons, run:
 ```
 rostopic pub --once /mapf_base/goal_init_flag std_msgs/Bool "data: true"
 ```
-then the mapf_base node will generate a global plan
+Then the mapf_base node will generate a global plan, which can be visualized in rviz.
 
 ## mapping
 
-Use a single robot to build a map.
+Use a single robot to build a map.　
+
+The steps are roughly the same as the official tutorial.
 
 - bringup
 ```
@@ -69,7 +75,7 @@ roslaunch ridgeback_test ridgeback_world.launch
 ```
 roslaunch ridgeback_navigation karto_demo.launch
 ``` 
-You can also use gmapping.
+You can also use gmapping, remember to open two gmapping nodes, refer to the configuration of [karto_demo.launch](https://github.com/speedzjy/ridgeback_mapf/blob/main/ridgeback_navigation/launch/karto_demo.launch).
 
 **Notes:** The mapping process produces both low-resolution and high-resolution maps
 
@@ -78,10 +84,14 @@ You can also use gmapping.
   - low-resolution map: ```rosrun map_server map_saver map:=/map_low_resolution -f ./mymap_low_reso```
 
 **Notes:**
-Since the low-resolution map and the high-resolution map do not completely overlap, the **origin** param in the **mymap_low_reso.yaml** file needs to be modified appropriately to make the two maps appear to overlap.
+If the low-resolution map and the high-resolution map do not completely overlap, the **origin** param in the **mymap_low_reso.yaml** file needs to be modified appropriately to make the two maps appear to overlap.
+
+<div align='center'>
+  <img src='./doc/map_tune.png'/>
+</div>
 
 ## Run mapf with new map
-- change the high-resolution map name in [multi_nav_single.launch](https://github.com/speedzjy/ridgeback_mapf/blob/main/ridgeback_navigation/multi_launch/multi_nav_single.launch)
-- change the low-resolution map name in [mapf_example.launch](https://github.com/speedzjy/mapf_ros/blob/main/mapf_base/launch/mapf_example.launch)
+- change the **high**-resolution map name in [multi_nav_single.launch](https://github.com/speedzjy/ridgeback_mapf/blob/main/ridgeback_navigation/multi_launch/multi_nav_single.launch)
+- change the **low**-resolution map name in [mapf_example.launch](https://github.com/speedzjy/mapf_ros/blob/main/mapf_base/launch/mapf_example.launch)
 
 Then follow the quickstart steps.
