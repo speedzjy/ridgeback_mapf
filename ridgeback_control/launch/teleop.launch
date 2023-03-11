@@ -5,7 +5,7 @@
   <group ns="bluetooth_teleop" if="$(arg joystick)">
 
     <group unless="$(optenv RIDGEBACK_PS3 0)" >
-      <rosparam command="load" file="$(find ridgeback_tmp)/config/teleop_js1.yaml" />
+      <rosparam command="load" file="$(find ridgeback_test)/config/teleop_js1.yaml" />
     </group>
 
     <group if="$(optenv RIDGEBACK_PS3 0)" >
