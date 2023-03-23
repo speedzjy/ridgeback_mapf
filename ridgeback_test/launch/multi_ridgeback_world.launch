@@ -58,7 +58,14 @@
     </include>
 
     <!-- 将 odom | /ridgeback_controller/odom | imu/data 的 frame 改成有前缀的 -->
-    <node name="odom_to_odom_correct" pkg="ridgeback_test" type="odom_to_odom_correct_node" output="screen">
+    <node name="odom_to_odom_correct" pkg="ridgeback_test" type="odom_to_odom_correct_node"
+      output="screen">
+      <param name="tf_prefix" value="$(arg first_rb)" />
+    </node>
+
+    <!-- 将 front/scan | rear/scan 的 frame 改成有前缀的 -->
+    <node name="laser_frame_correct" pkg="ridgeback_test" type="laser_frame_correct_node"
+      output="screen">
       <param name="tf_prefix" value="$(arg first_rb)" />
     </node>
   </group>
@@ -85,7 +92,14 @@
       <arg name="tf_prefix" value="$(arg second_rb)" />
     </include>
 
-    <node name="odom_to_odom_correct" pkg="ridgeback_test" type="odom_to_odom_correct_node" output="screen">
+    <node name="odom_to_odom_correct" pkg="ridgeback_test" type="odom_to_odom_correct_node"
+      output="screen">
+      <param name="tf_prefix" value="$(arg second_rb)" />
+    </node>
+
+    <!-- 将 front/scan | rear/scan 的 frame 改成有前缀的 -->
+    <node name="laser_frame_correct" pkg="ridgeback_test" type="laser_frame_correct_node"
+      output="screen">
       <param name="tf_prefix" value="$(arg second_rb)" />
     </node>
   </group>

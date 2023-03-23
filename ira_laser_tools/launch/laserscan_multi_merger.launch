@@ -8,7 +8,7 @@
 		<param name="destination_frame" value="$(arg tf_prefix)/front_laser"/>
 		<param name="cloud_destination_topic" value="/$(arg tf_prefix)/merged_cloud"/>
 		<param name="scan_destination_topic" value="/$(arg tf_prefix)/scan_full"/>
-		<param name="laserscan_topics" value ="/$(arg tf_prefix)/front/scan /$(arg tf_prefix)/rear/scan" />
+		<param name="laserscan_topics" value ="/$(arg tf_prefix)/front/scan_correct /$(arg tf_prefix)/rear/scan_correct" />
 		<!-- LIST OF THE LASER SCAN TOPICS TO SUBSCRIBE -->
 		<param name="angle_min" value="-3.1415926"/>
 		<param name="angle_max" value="3.1415926"/>

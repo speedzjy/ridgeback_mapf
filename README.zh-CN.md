@@ -30,6 +30,17 @@ catkin_make
 
 # Run
 
+多机处理涉及到 ROS 命名空间，需要修改雷达插件中的命名空间参数:
+```
+roscd lms1xx/urdf/
+sudo gedit sick_lms1xx.urdf.xacro
+```
+
+翻到文件最后，注释掉robotNamespace这一行
+<div align='center'>
+  <img src='./doc/laser_plugin.png'/>
+</div>
+
 ## quick start
 - bringup
 ```

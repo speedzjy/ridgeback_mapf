@@ -35,3 +35,9 @@ target_link_libraries(odom_to_odom_correct_node
   ${catkin_LIBRARIES}
 )
 
+add_executable(laser_frame_correct_node src/laser_frame_correct.cpp)
+
+target_link_libraries(laser_frame_correct_node
+  ${catkin_LIBRARIES}
+)
+

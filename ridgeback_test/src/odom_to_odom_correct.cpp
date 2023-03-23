@@ -1,9 +1,3 @@
-/*
- * @Description:
- * @Author: speedzjy
- * @Date: 2022-08-12 10:38:53
- */
-
 #include <iostream>
 #include <string>
 #include <vector>
@@ -39,8 +33,7 @@ public:
     subControllerOdom =
         nh.subscribe("ridgeback_velocity_controller/odom", 1,
                      &TransOdomImuFrame::ControllerOdomCallback, this);
-    subImu =
-        nh.subscribe("imu/data", 1, &TransOdomImuFrame::imuCallback, this);
+    subImu = nh.subscribe("imu/data", 1, &TransOdomImuFrame::imuCallback, this);
 
     pubOdom = nh.advertise<nav_msgs::Odometry>("odom_correct", 1);
     pubControllerOdom = nh.advertise<nav_msgs::Odometry>(

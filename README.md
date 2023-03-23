@@ -30,6 +30,19 @@ catkin_make
 
 # Run
 
+ROS namespaces are involved in multi-agent processing, and namespace parameters in laser plugins need to be modified:
+
+```
+roscd lms1xx/urdf/
+sudo gedit sick_lms1xx.urdf.xacro
+```
+
+Go to the end of the file and comment out the robotNamespace line:
+
+<div align='center'>
+  <img src='./doc/laser_plugin.png'/>
+</div>
+
 ## quick start
 - bringup
 ```
