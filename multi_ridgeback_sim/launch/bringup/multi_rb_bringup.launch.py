@@ -184,12 +184,21 @@ def launch_setup(context, *args, **kwargs):
             output="screen",
         )
 
-        # tf delay
-        node_tf2_delay = Node(
+        # tf relay
+        node_tf2_relay = Node(
             namespace=namespace,
             package="multi_ridgeback_sim",
             executable="tf_namespace_relay",
             name="tf_namespace_relay",
+            output="screen",
+        )
+
+        # scan frame relay
+        node_scan_relay = Node(
+            namespace=namespace,
+            package="multi_ridgeback_sim",
+            executable="scan_frame_relay",
+            name="scan_frame_relay",
             output="screen",
         )
 
@@ -213,7 +222,11 @@ def launch_setup(context, *args, **kwargs):
                     on_exit=[
                         TimerAction(
                             period=delay_laser_tools,  # 3.0
-                            actions=[node_tf2_delay, launch_ira_laser_tools_cmd],
+                            actions=[
+                                node_scan_relay,
+                                node_tf2_relay,
+                                launch_ira_laser_tools_cmd,
+                            ],
                         ),
                     ],
                 )
@@ -261,7 +274,11 @@ def launch_setup(context, *args, **kwargs):
                     on_exit=[
                         TimerAction(
                             period=delay_laser_tools,  # 3.0
-                            actions=[node_tf2_delay, launch_ira_laser_tools_cmd],
+                            actions=[
+                                node_scan_relay,
+                                node_tf2_relay,
+                                launch_ira_laser_tools_cmd,
+                            ],
                         ),
                     ],
                 )

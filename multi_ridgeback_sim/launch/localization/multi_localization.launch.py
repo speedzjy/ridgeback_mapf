@@ -44,6 +44,7 @@ from launch.substitutions import (
     LaunchConfiguration,
     PathJoinSubstitution,
     EnvironmentVariable,
+    TextSubstitution,
 )
 
 from launch_ros.actions import Node, PushRosNamespace, SetRemap
@@ -76,18 +77,36 @@ def launch_setup(context, *args, **kwargs):
         [pkg_clearpath_nav2_demos, "launch/localization", "localization.launch.py"]
     )
 
+    delay = 5.0
     actions = []
 
     robot_list = ["rb_0", "rb_1"]
-    for robot in robot_list:
+    # robot_list = ["rb_0"]
+    for i, robot in enumerate(robot_list):
         localization = IncludeLaunchDescription(
             PythonLaunchDescriptionSource(launch_localization),
             launch_arguments=[
-                ("setup_path", PathJoinSubstitution([setup_path, robot + "/"])),
+                ("namespace", robot),
                 ("use_sim_time", use_sim_time),
+                ("use_rviz", TextSubstitution(text="false")),
             ],
         )
-        actions.append(localization)
+        actions.append(TimerAction(period=delay * i, actions=[localization]))
+    
+    
+    # multi_rviz
+    config_rviz = PathJoinSubstitution(
+        [pkg_clearpath_nav2_demos, "rviz", "multi_nav2.rviz"]
+    )
+    rviz = Node(
+        package="rviz2",
+        executable="rviz2",
+        name="rviz2",
+        arguments=["-d", config_rviz],
+        parameters=[{"use_sim_time": LaunchConfiguration("use_sim_time")}],
+        output="screen"
+    )
+    actions.append(rviz)
 
     return actions
 

@@ -24,6 +24,10 @@ add_executable(scan_throttle_node src/scan_throttle_node.cpp)
 ament_target_dependencies(scan_throttle_node rclcpp sensor_msgs)
 install(TARGETS scan_throttle_node DESTINATION lib/${PROJECT_NAME})
 
+add_executable(scan_frame_relay src/scan_frame_relay.cpp)
+ament_target_dependencies(scan_frame_relay rclcpp sensor_msgs)
+install(TARGETS scan_frame_relay DESTINATION lib/${PROJECT_NAME})
+
 
 # others
 install(

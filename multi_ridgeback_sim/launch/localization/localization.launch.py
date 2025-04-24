@@ -31,6 +31,8 @@ from clearpath_config.common.utils.yaml import read_yaml
 from clearpath_config.clearpath_config import ClearpathConfig
 
 from launch import LaunchDescription
+from launch.conditions import IfCondition
+
 from launch.actions import (
     DeclareLaunchArgument,
     GroupAction,
@@ -57,9 +59,15 @@ ARGUMENTS = [
         description="Use sim time",
     ),
     DeclareLaunchArgument(
-        "setup_path",
-        default_value=[EnvironmentVariable("HOME"), "/clearpath/rb_0/"],
-        description="Clearpath setup path",
+        "namespace",
+        default_value=["rb_0"],
+        description="Clearpath namespace",
+    ),
+    DeclareLaunchArgument(
+        "use_rviz",
+        default_value=["false"],
+        choices=["true", "false"],
+        description="Use rviz",
     ),
 ]
 
@@ -72,15 +80,9 @@ def launch_setup(context, *args, **kwargs):
 
     # Launch Configurations
     use_sim_time = LaunchConfiguration("use_sim_time")
-    setup_path = LaunchConfiguration("setup_path")
     map = LaunchConfiguration("map")
 
-    # Read robot YAML
-    config = read_yaml(setup_path.perform(context) + "robot.yaml")
-    # Parse robot YAML into config
-    clearpath_config = ClearpathConfig(config)
-
-    namespace = clearpath_config.system.namespace
+    namespace = str(LaunchConfiguration("namespace").perform(context))
 
     file_parameters = PathJoinSubstitution(
         [pkg_clearpath_nav2_demos, "config", "localization.yaml"]
@@ -116,12 +118,12 @@ def launch_setup(context, *args, **kwargs):
         [
             PushRosNamespace(namespace),
             SetRemap(
-                "/" + namespace + "/global_costmap/scan_full",
-                "/" + namespace + "/scan_full",
+                "global_costmap/scan_full",
+                "scan_full",
             ),
             SetRemap(
-                "/" + namespace + "/local_costmap/scan_full",
-                "/" + namespace + "/scan_full",
+                "local_costmap/scan_full",
+                "scan_full",
             ),
             IncludeLaunchDescription(
                 PythonLaunchDescriptionSource(launch_nav2),
@@ -136,7 +138,9 @@ def launch_setup(context, *args, **kwargs):
     )
 
     # rviz
-    config_rviz = PathJoinSubstitution([pkg_clearpath_nav2_demos, "rviz", "nav2.rviz"])
+    config_rviz = PathJoinSubstitution(
+        [pkg_clearpath_nav2_demos, "rviz", "single_nav2.rviz"]
+    )
     rviz = Node(
         namespace=namespace,
         package="rviz2",
@@ -146,12 +150,17 @@ def launch_setup(context, *args, **kwargs):
         parameters=[{"use_sim_time": LaunchConfiguration("use_sim_time")}],
         remappings=[("/tf", "tf"), ("/tf_static", "tf_static")],
         output="screen",
+        condition=IfCondition(LaunchConfiguration("use_rviz")),
     )
 
-    delayed_localization = TimerAction(period=2.0, actions=[localization])
-    delayed_nav2 = TimerAction(period=8.0, actions=[nav2])
+    actions = [
+        rviz,
+        TimerAction(
+            period=1.0, actions=[localization, TimerAction(period=3.0, actions=[nav2])]
+        ),
+    ]
 
-    return [rviz, delayed_localization, delayed_nav2]
+    return actions
 
 
 def generate_launch_description():
