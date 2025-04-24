@@ -1,0 +1,75 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+  <xacro:macro name="hokuyo_ust" params="name parent_link *origin
+                                          ang_res:=0.25 min_ang:=-2.35619 max_ang:=2.35619
+                                          update_rate:=40 min_range:=0.06 max_range:=30.0">
+    <link name="${name}_link">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <!-- Origin of this mesh is the base of the bracket. -->
+          <mesh filename="package://clearpath_sensors_description/meshes/hokuyo_ust.stl" />
+        </geometry>
+        <material name="clearpath_dark_grey" />
+      </visual>
+    </link>
+
+    <link name="${name}_laser">
+      <inertial>
+        <mass value="1.1" />
+        <origin xyz="0 0 0" />
+        <inertia ixx="${0.0833333 * 1.1 * (0.102*0.102 + 0.152*0.152)}" ixy="0.0" ixz="0.0"
+                 iyy="${0.0833333 * 1.1 * (0.105*0.105 + 0.152*0.152)}" iyz="0.0"
+                 izz="${0.0833333 * 1.1 * (0.105*0.105 + 0.102*0.102)}" />
+      </inertial>
+    </link>
+
+    <joint name="${name}_joint" type="fixed">
+      <xacro:insert_block name="origin" />
+      <parent link="${parent_link}" />
+      <child link="${name}_link" />
+    </joint>
+
+    <joint name="${name}_laser_joint" type="fixed">
+      <!-- This offset is from the base of the bracket to the LIDAR's focal point. -->
+      <origin xyz="0 0 0.0474" rpy="0 0 0" />
+      <parent link="${name}_link" />
+      <child link="${name}_laser" />
+    </joint>
+
+    <xacro:property name="samples" value="${round((max_ang - min_ang) * 180 / (ang_res * pi))}"/>
+
+    <gazebo reference="${name}_laser">
+      <sensor name="${name}" type="gpu_lidar">
+        <update_rate>${update_rate}</update_rate>
+        <visualize>true</visualize>
+        <always_on>true</always_on>
+        <ignition_frame_id>${name}_laser</ignition_frame_id>
+        <topic>$(arg namespace)/sensors/${name}/scan</topic>
+        <lidar>
+          <scan>
+            <horizontal>
+              <samples>${samples}</samples>
+              <resolution>1</resolution>
+              <min_angle>${min_ang}</min_angle>
+              <max_angle>${max_ang}</max_angle>
+            </horizontal>
+            <vertical>
+              <samples>1</samples>
+              <resolution>1</resolution>
+              <min_angle>0</min_angle>
+              <max_angle>0</max_angle>
+            </vertical>
+          </scan>
+          <range>
+            <min>${min_range}</min>
+            <max>${max_range}</max>
+            <resolution>0.01</resolution>
+          </range>
+        </lidar>
+      </sensor>
+    </gazebo>
+
+  </xacro:macro>
+
+</robot>

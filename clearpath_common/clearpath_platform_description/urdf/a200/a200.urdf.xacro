@@ -1,0 +1,219 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <xacro:arg name="namespace" default="" />
+  <xacro:arg name="is_sim" default="false" />
+  <xacro:arg name="serial_port" default="/dev/clearpath/prolific" />
+  <xacro:arg name="gazebo_controllers" default="$(find clearpath_control)/config/a200/control.yaml"/>
+  <xacro:arg name="use_platform_controllers" default="true"/>
+
+  <!-- Included URDF/XACRO Files -->
+  <xacro:include filename="$(find clearpath_platform_description)/urdf/a200/wheels/wheel.urdf.xacro" />
+
+  <xacro:property name="M_PI" value="3.14159"/>
+
+  <xacro:macro name="a200" params="wheel:='default'">
+
+    <!-- Base Size -->
+    <xacro:property name="base_x_size" value="0.98740000" />
+    <xacro:property name="base_y_size" value="0.57090000" />
+    <xacro:property name="base_z_size" value="0.24750000" />
+
+    <!-- Wheel Mounting Positions -->
+    <xacro:property name="wheelbase" value="0.5120" />
+    <xacro:property name="track" value="0.555" />
+    <xacro:property name="wheel_vertical_offset" value="0.03282" />
+
+    <!-- Wheel Properties -->
+    <xacro:property name="wheel_length" value="0.1143" />
+    <xacro:property name="wheel_radius" value="0.1651" />
+
+    <!-- Base link is the center of the robot's bottom plate -->
+    <link name="base_link">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <mesh filename="package://clearpath_platform_description/meshes/a200/base_link.dae" />
+        </geometry>
+      </visual>
+      <collision>
+        <origin xyz="0 0 ${base_z_size/4}" rpy="0 0 0" />
+        <geometry>
+          <box size="${base_x_size} ${base_y_size} ${base_z_size/2}"/>
+        </geometry>
+      </collision>
+      <collision>
+        <origin xyz="0 0 ${base_z_size*3/4-0.01}" rpy="0 0 0" />
+        <geometry>
+          <box size="${base_x_size*4/5} ${base_y_size} ${base_z_size/2-0.02}"/>
+        </geometry>
+      </collision>
+    </link>
+
+    <!-- Base footprint is on the ground under the robot -->
+    <link name="base_footprint"/>
+
+    <joint name="base_footprint_joint" type="fixed">
+      <origin xyz="0 0 ${wheel_vertical_offset - wheel_radius}" rpy="0 0 0" />
+      <parent link="base_link" />
+      <child link="base_footprint" />
+    </joint>
+
+    <!-- Spawn A200 chassis -->
+    <link name="top_chassis_link">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <mesh filename="package://clearpath_platform_description/meshes/a200/top_chassis.dae" />
+        </geometry>
+      </visual>
+    </link>
+
+    <!-- Attach chassis to the robot -->
+    <joint name="top_chassis_joint" type="fixed">
+      <parent link="base_link" />
+      <child link="top_chassis_link" />
+    </joint>
+
+    <!-- Inertial link stores the robot's inertial information -->
+    <link name="inertial_link">
+      <inertial>
+        <mass value="46.034" />
+        <origin xyz="-0.00065 -0.085 0.062" />
+        <inertia ixx="0.6022" ixy="-0.02364" ixz="-0.1197" iyy="1.7386" iyz="-0.001544" izz="2.0296" />
+      </inertial>
+    </link>
+
+    <joint name="inertial_joint" type="fixed">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <parent link="base_link" />
+      <child link="inertial_link" />
+    </joint>
+
+    <!-- A200 wheel macros -->
+    <xacro:a200_wheel wheel_prefix="front_left">
+      <origin xyz="${wheelbase/2} ${track/2} ${wheel_vertical_offset}" rpy="0 0 0" />
+    </xacro:a200_wheel>
+    <xacro:a200_wheel wheel_prefix="front_right">
+      <origin xyz="${wheelbase/2} ${-track/2} ${wheel_vertical_offset}" rpy="0 0 0" />
+    </xacro:a200_wheel>
+    <xacro:a200_wheel wheel_prefix="rear_left">
+      <origin xyz="${-wheelbase/2} ${track/2} ${wheel_vertical_offset}" rpy="0 0 0" />
+    </xacro:a200_wheel>
+    <xacro:a200_wheel wheel_prefix="rear_right">
+      <origin xyz="${-wheelbase/2} ${-track/2} ${wheel_vertical_offset}" rpy="0 0 0" />
+    </xacro:a200_wheel>
+
+    <gazebo>
+      <plugin filename="libignition-gazebo-wheel-slip-system.so" name="ignition::gazebo::systems::WheelSlip">
+        <wheel link_name="front_left_wheel">
+          <slip_compliance_lateral>1.0</slip_compliance_lateral>
+          <slip_compliance_longitudinal>1.0</slip_compliance_longitudinal>
+          <wheel_normal_force>113</wheel_normal_force>
+          <wheel_radius>${wheel_radius}</wheel_radius>
+        </wheel>
+        <wheel link_name="front_right_wheel">
+          <slip_compliance_lateral>1.0</slip_compliance_lateral>
+          <slip_compliance_longitudinal>1.0</slip_compliance_longitudinal>
+          <wheel_normal_force>113</wheel_normal_force>
+          <wheel_radius>${wheel_radius}</wheel_radius>
+        </wheel>
+        <wheel link_name="rear_left_wheel">
+          <slip_compliance_lateral>1.0</slip_compliance_lateral>
+          <slip_compliance_longitudinal>1.0</slip_compliance_longitudinal>
+          <wheel_normal_force>113</wheel_normal_force>
+          <wheel_radius>${wheel_radius}</wheel_radius>
+        </wheel>
+        <wheel link_name="rear_right_wheel">
+          <slip_compliance_lateral>1.0</slip_compliance_lateral>
+          <slip_compliance_longitudinal>1.0</slip_compliance_longitudinal>
+          <wheel_normal_force>113</wheel_normal_force>
+          <wheel_radius>${wheel_radius}</wheel_radius>
+        </wheel>
+      </plugin>
+    </gazebo>
+
+    <!-- Front bumper mount -->
+    <link name="front_bumper_mount"/>
+
+    <joint name="front_bumper_mount_joint" type="fixed">
+      <origin xyz="0.406 0 0.091" rpy="0 0 0" />
+      <parent link="base_link" />
+      <child link="front_bumper_mount" />
+    </joint>
+
+    <!-- Rear bumper mount -->
+    <link name="rear_bumper_mount"/>
+
+    <joint name="rear_bumper_mount_joint" type="fixed">
+      <origin xyz="-0.406 0 0.091" rpy="0 0 ${M_PI}" />
+      <parent link="base_link" />
+      <child link="rear_bumper_mount" />
+    </joint>
+
+    <!-- Default mount -->
+    <link name="default_mount"/>
+
+    <joint name="default_mount_joint" type="fixed">
+      <child link="default_mount"/>
+      <parent link="base_link"/>
+      <origin xyz="0.0 0.0 0.224"/>
+    </joint>
+
+    <!-- Gazebo Controller -->
+    <xacro:include filename="$(find clearpath_platform_description)/urdf/generic/gazebo.urdf.xacro"/>
+
+    <!-- ROS2 controls -->
+    <xacro:if value="$(arg use_platform_controllers)">
+      <ros2_control name="a200_hardware" type="system">
+        <hardware>
+          <xacro:if value="$(arg is_sim)">
+            <plugin>ign_ros2_control/IgnitionSystem</plugin>
+          </xacro:if>
+          <xacro:unless value="$(arg is_sim)">
+            <plugin>clearpath_hardware_interfaces/A200Hardware</plugin>
+            <param name="wheel_diameter">0.3302</param>
+            <param name="max_accel">5.0</param>
+            <param name="max_speed">1.0</param>
+            <param name="polling_timeout">0.1</param>
+            <param name="serial_port">$(arg serial_port)</param>
+          </xacro:unless>
+        </hardware>
+        <joint name="front_left_wheel_joint">
+          <command_interface name="velocity">
+            <param name="min">-1</param>
+            <param name="max">1</param>
+          </command_interface>
+          <state_interface name="position"/>
+          <state_interface name="velocity"/>
+        </joint>
+        <joint name="rear_left_wheel_joint">
+          <command_interface name="velocity">
+            <param name="min">-1</param>
+            <param name="max">1</param>
+          </command_interface>
+          <state_interface name="position"/>
+          <state_interface name="velocity"/>
+        </joint>
+        <joint name="front_right_wheel_joint">
+          <command_interface name="velocity">
+            <param name="min">-1</param>
+            <param name="max">1</param>
+          </command_interface>
+          <state_interface name="position"/>
+          <state_interface name="velocity"/>
+        </joint>
+        <joint name="rear_right_wheel_joint">
+          <command_interface name="velocity">
+            <param name="min">-1</param>
+            <param name="max">1</param>
+          </command_interface>
+          <state_interface name="position"/>
+          <state_interface name="velocity"/>
+        </joint>
+      </ros2_control>
+    </xacro:if>
+
+  </xacro:macro>
+
+</robot>

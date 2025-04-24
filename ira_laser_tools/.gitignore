@@ -1,0 +1,5 @@
+*.user
+.vscode/
+build
+install
+log

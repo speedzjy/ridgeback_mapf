@@ -1,0 +1,9 @@
+repositories:
+  clearpath_config:
+    type: git
+    url: https://github.com/clearpathrobotics/clearpath_config.git
+    version: humble
+  clearpath_msgs:
+    type: git
+    url: https://github.com/clearpathrobotics/clearpath_msgs.git
+    version: humble
