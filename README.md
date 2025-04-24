@@ -10,22 +10,22 @@
 
 This is a test case repository for [mapf_ros](https://github.com/speedzjy/mapf_ros) package.
 
-The robot used for the simulation test is **ridgeback**, which supports **omnidirectional** movement, the official website address is at [https://clearpathrobotics.com/assets/guides/melodic/ridgeback/index.html](https://clearpathrobotics.com/assets/guides/melodic/ridgeback/index.html). The official tutorial introduces the mapping and planning operations of a single robot in detail. After you are familiar with the process, you can clone this repository for multi-robot testing.
+The robot used for the simulation test is **ridgeback**, which supports **omnidirectional** movement, the official website address is at [https://clearpathrobotics.com/assets/guides/noetic/ridgeback/index.html](https://clearpathrobotics.com/assets/guides/noetic/ridgeback/index.html). The official tutorial introduces the mapping and planning operations of a single robot in detail. After you are familiar with the process, you can clone this repository for multi-robot testing.
 
 
 # Dependences
-This package has only been tested on **Ubuntu 18.04**
+This package has only been tested on **Ubuntu 20.04**
 
 - [navigation](https://github.com/ros-planning/navigation)
-  - ```sudo apt install ros-melodic-navigation```
-- [teb_local_planner](https://github.com/rst-tu-dortmund/teb_local_planner)
-  - download code and build: ```catkin_make```
+  - ```sudo apt install ros-noetic-navigation```
+- [eband_local_planner](https://github.com/utexas-bwi/eband_local_planner)
+  - download code and build: ```catkin build```
 - [ridgeback_simulater](https://github.com/ridgeback/ridgeback_simulator)
-  - ```sudo apt install ros-melodic-ridgeback-simulator```
+  - ```sudo apt install ros-noetic-ridgeback-simulator```
 
 # Build
 ```
-catkin_make
+catkin build
 ```
 
 # Run

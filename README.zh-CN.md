@@ -10,22 +10,22 @@
 
 本仓库作为测试用例仓库供 [mapf_ros](https://github.com/speedzjy/mapf_ros) 使用.
 
-仿真用的机器人是 ridgeback, 支持全向移动,官方网站[https://clearpathrobotics.com/assets/guides/melodic/ridgeback/index.html](https://clearpathrobotics.com/assets/guides/melodic/ridgeback/index.html). 官方教程详细介绍了单机器人的建图和导航步骤．建议进行接下来的实验之前先熟悉流程．
+仿真用的机器人是 ridgeback, 支持全向移动,官方网站[https://clearpathrobotics.com/assets/guides/noetic/ridgeback/index.html](https://clearpathrobotics.com/assets/guides/noetic/ridgeback/index.html). 官方教程详细介绍了单机器人的建图和导航步骤．建议进行接下来的实验之前先熟悉流程．
 
 
 # 依赖
-实验测试的平台为 **Ubuntu 18.04**
+实验测试的平台为 **Ubuntu 20.04**
 
 - [navigation](https://github.com/ros-planning/navigation)
-  - ```sudo apt install ros-melodic-navigation```
-- [teb_local_planner](https://github.com/rst-tu-dortmund/teb_local_planner)
-  - download code and build: ```catkin_make```
+  - ```sudo apt install ros-noetic-navigation```
+- [eband_local_planner](https://github.com/utexas-bwi/eband_local_planner)
+  - download code and build: ```catkin build```
 - [ridgeback_simulater](https://github.com/ridgeback/ridgeback_simulator)
-  - ```sudo apt install ros-melodic-ridgeback-simulator```
+  - ```sudo apt install ros-noetic-ridgeback-simulator```
 
 # 编译
 ```
-catkin_make
+catkin build
 ```
 
 # Run
