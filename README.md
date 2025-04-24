@@ -18,7 +18,7 @@ This package has only been tested on **Ubuntu 18.04**
 
 - [navigation](https://github.com/ros-planning/navigation)
   - ```sudo apt install ros-melodic-navigation```
-- [teb_local_planner](https://github.com/rst-tu-dortmund/teb_local_planner)
+- [eband_local_planner](https://github.com/utexas-bwi/eband_local_planner)
   - download code and build: ```catkin_make```
 - [ridgeback_simulater](https://github.com/ridgeback/ridgeback_simulator)
   - ```sudo apt install ros-melodic-ridgeback-simulator```
