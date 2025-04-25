@@ -1,4 +1,0 @@
-# Default initial positions for robot's ros2_control fake system
-
-initial_positions:
-  ${name}_finger_joint: 0.0

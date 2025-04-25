@@ -1,4 +1,0 @@
-/**/device:
-  ros__parameters:
-    serial_no: "0"
-    pointcloud.enable: true
