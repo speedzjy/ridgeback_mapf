@@ -1,0 +1,4 @@
+[submodule "clearpath_common"]
+	path = clearpath_common
+	url = git@github.com:Speed-Robotic/clearpath_common.git
+	branch = humble
