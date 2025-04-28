@@ -748,116 +748,6 @@ Visualization Manager:
             Expand Link Details: false
             Expand Tree: false
             Link Tree Style: Links in Alphabetic Order
-            axle_link:
-              Alpha: 1
-              Show Axes: false
-              Show Trail: false
-              Value: true
-            base_link:
-              Alpha: 1
-              Show Axes: false
-              Show Trail: false
-            chassis_link:
-              Alpha: 1
-              Show Axes: false
-              Show Trail: false
-              Value: true
-            default_mount:
-              Alpha: 1
-              Show Axes: false
-              Show Trail: false
-            front_cover_link:
-              Alpha: 1
-              Show Axes: false
-              Show Trail: false
-              Value: true
-            front_left_wheel_link:
-              Alpha: 1
-              Show Axes: false
-              Show Trail: false
-              Value: true
-            front_lights_link:
-              Alpha: 1
-              Show Axes: false
-              Show Trail: false
-              Value: true
-            front_right_wheel_link:
-              Alpha: 1
-              Show Axes: false
-              Show Trail: false
-              Value: true
-            front_rocker_link:
-              Alpha: 1
-              Show Axes: false
-              Show Trail: false
-              Value: true
-            imu_0_link:
-              Alpha: 1
-              Show Axes: false
-              Show Trail: false
-            left_side_cover_link:
-              Alpha: 1
-              Show Axes: false
-              Show Trail: false
-              Value: true
-            lidar2d_0_laser:
-              Alpha: 1
-              Show Axes: false
-              Show Trail: false
-            lidar2d_0_link:
-              Alpha: 1
-              Show Axes: false
-              Show Trail: false
-              Value: true
-            lidar2d_1_laser:
-              Alpha: 1
-              Show Axes: false
-              Show Trail: false
-            lidar2d_1_link:
-              Alpha: 1
-              Show Axes: false
-              Show Trail: false
-              Value: true
-            rear_cover_link:
-              Alpha: 1
-              Show Axes: false
-              Show Trail: false
-              Value: true
-            rear_left_wheel_link:
-              Alpha: 1
-              Show Axes: false
-              Show Trail: false
-              Value: true
-            rear_lights_link:
-              Alpha: 1
-              Show Axes: false
-              Show Trail: false
-              Value: true
-            rear_right_wheel_link:
-              Alpha: 1
-              Show Axes: false
-              Show Trail: false
-              Value: true
-            rear_rocker_link:
-              Alpha: 1
-              Show Axes: false
-              Show Trail: false
-              Value: true
-            right_side_cover_link:
-              Alpha: 1
-              Show Axes: false
-              Show Trail: false
-              Value: true
-            riser_link:
-              Alpha: 1
-              Show Axes: false
-              Show Trail: false
-              Value: true
-            top_link:
-              Alpha: 1
-              Show Axes: false
-              Show Trail: false
-              Value: true
           Mass Properties:
             Inertia: false
             Mass: false
@@ -899,7 +789,7 @@ Visualization Manager:
             Reliability Policy: Reliable
             Value: waypoints
           Value: true
-      Enabled: true
+      Enabled: false
       Name: rb_1
   Enabled: true
   Global Options:
@@ -963,11 +853,11 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Scale: 30.458721160888672
+      Scale: 45.886600494384766
       Target Frame: <Fixed Frame>
       Value: TopDownOrtho (rviz_default_plugins)
-      X: -2.686995506286621
-      Y: -0.5256931185722351
+      X: 1.2929754257202148
+      Y: 0.941444993019104
     Saved: ~
 Window Geometry:
   Displays:

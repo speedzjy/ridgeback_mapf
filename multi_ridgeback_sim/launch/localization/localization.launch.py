@@ -76,7 +76,8 @@ def launch_setup(context, *args, **kwargs):
     # Packages
     # pkg_clearpath_nav2_demos = get_package_share_directory('clearpath_nav2_demos')
     pkg_clearpath_nav2_demos = get_package_share_directory("multi_ridgeback_sim")
-    pkg_nav2_bringup = get_package_share_directory("nav2_bringup")
+    # pkg_nav2_bringup = get_package_share_directory("nav2_bringup")
+    pkg_nav2_bringup = get_package_share_directory("multi_ridgeback_sim")
 
     # Launch Configurations
     use_sim_time = LaunchConfiguration("use_sim_time")
@@ -89,7 +90,7 @@ def launch_setup(context, *args, **kwargs):
     )
 
     launch_localization = PathJoinSubstitution(
-        [pkg_nav2_bringup, "launch", "localization_launch.py"]
+        [pkg_nav2_bringup, "launch/include", "localization_launch.py"]
     )
 
     localization = GroupAction(
@@ -112,7 +113,7 @@ def launch_setup(context, *args, **kwargs):
         [pkg_clearpath_nav2_demos, "config", "nav2.yaml"]
     )
     launch_nav2 = PathJoinSubstitution(
-        [pkg_nav2_bringup, "launch", "navigation_launch.py"]
+        [pkg_nav2_bringup, "launch/include", "navigation_launch.py"]
     )
     nav2 = GroupAction(
         [

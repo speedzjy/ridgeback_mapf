@@ -184,6 +184,29 @@ def launch_setup(context, *args, **kwargs):
             output="screen",
         )
 
+        # 位姿映射
+        pose_bridge = Node(
+            namespace=namespace,
+            package="ros_gz_bridge",
+            executable="parameter_bridge",
+            name=f"pose_bridge",
+            output="screen",
+            arguments=[
+                f"/model/{namespace}/robot/pose@tf2_msgs/msg/TFMessage[ignition.msgs.Pose_V"
+            ],
+            remappings=[(f"/model/{namespace}/robot/pose", f"/{namespace}/ign_tf")],
+        )
+        
+        # 保存位姿
+        save_pose = Node(
+            namespace=namespace,
+            package="task_communication",
+            executable="record_pose",
+            name=f"record_pose",
+            # output="screen",
+            remappings=[(f"/tf", f"ign_tf")],
+        )
+
         # tf relay
         node_tf2_relay = Node(
             namespace=namespace,
@@ -215,6 +238,14 @@ def launch_setup(context, *args, **kwargs):
             launch_arguments=[("namespace", namespace)],
         )
 
+        append_nodes = [
+            pose_bridge,
+            save_pose,
+            node_scan_relay,
+            node_tf2_relay,
+            launch_ira_laser_tools_cmd,
+        ]
+
         if robot_index == 0:
             event_spawn_robot = RegisterEventHandler(
                 event_handler=OnProcessExit(
@@ -222,11 +253,7 @@ def launch_setup(context, *args, **kwargs):
                     on_exit=[
                         TimerAction(
                             period=delay_laser_tools,  # 3.0
-                            actions=[
-                                node_scan_relay,
-                                node_tf2_relay,
-                                launch_ira_laser_tools_cmd,
-                            ],
+                            actions=append_nodes,
                         ),
                     ],
                 )
@@ -274,11 +301,7 @@ def launch_setup(context, *args, **kwargs):
                     on_exit=[
                         TimerAction(
                             period=delay_laser_tools,  # 3.0
-                            actions=[
-                                node_scan_relay,
-                                node_tf2_relay,
-                                launch_ira_laser_tools_cmd,
-                            ],
+                            actions=append_nodes,
                         ),
                     ],
                 )
