@@ -80,8 +80,8 @@ def launch_setup(context, *args, **kwargs):
     delay = 5.0
     actions = []
 
-    robot_list = ["rb_0", "rb_1"]
-    # robot_list = ["rb_0"]
+    # robot_list = ["rb_0", "rb_1"]
+    robot_list = ["rb_0"]
     for i, robot in enumerate(robot_list):
         localization = IncludeLaunchDescription(
             PythonLaunchDescriptionSource(launch_localization),
@@ -104,9 +104,9 @@ def launch_setup(context, *args, **kwargs):
         name="rviz2",
         arguments=["-d", config_rviz],
         parameters=[{"use_sim_time": LaunchConfiguration("use_sim_time")}],
-        output="screen"
+        # output="screen"
     )
-    actions.append(rviz)
+    # actions.append(rviz)
 
     return actions
 

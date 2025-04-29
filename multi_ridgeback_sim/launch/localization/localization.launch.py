@@ -85,27 +85,46 @@ def launch_setup(context, *args, **kwargs):
 
     namespace = str(LaunchConfiguration("namespace").perform(context))
 
-    file_parameters = PathJoinSubstitution(
-        [pkg_clearpath_nav2_demos, "config", "localization.yaml"]
+    # file_parameters = PathJoinSubstitution(
+    #     [pkg_clearpath_nav2_demos, "config", "localization.yaml"]
+    # )
+
+    # launch_localization = PathJoinSubstitution(
+    #     [pkg_nav2_bringup, "launch/include", "localization_launch.py"]
+    # )
+
+    # localization = GroupAction(
+    #     [
+    #         PushRosNamespace(namespace),
+    #         IncludeLaunchDescription(
+    #             PythonLaunchDescriptionSource(launch_localization),
+    #             launch_arguments=[
+    #                 ("namespace", namespace),
+    #                 ("map", map),
+    #                 ("use_sim_time", use_sim_time),
+    #                 ("params_file", file_parameters),
+    #             ],
+    #         ),
+    #     ]
+    # )
+
+    # gps
+    docking_tf_pose = Node(
+        namespace=namespace,
+        package="docking_tf",
+        executable="docking_tf_pose",
+        name="docking_tf_pose",
+        output="screen",
+        remappings=[("/tf", "ign_tf")],
     )
 
-    launch_localization = PathJoinSubstitution(
-        [pkg_nav2_bringup, "launch/include", "localization_launch.py"]
-    )
-
-    localization = GroupAction(
-        [
-            PushRosNamespace(namespace),
-            IncludeLaunchDescription(
-                PythonLaunchDescriptionSource(launch_localization),
-                launch_arguments=[
-                    ("namespace", namespace),
-                    ("map", map),
-                    ("use_sim_time", use_sim_time),
-                    ("params_file", file_parameters),
-                ],
-            ),
-        ]
+    docking_tf_broadcaster = Node(
+        namespace=namespace,
+        package="docking_tf",
+        executable="docking_tf_broadcaster",
+        name="docking_tf_broadcaster",
+        output="screen",
+        remappings=[("/tf", "tf")],
     )
 
     # nav
@@ -156,8 +175,17 @@ def launch_setup(context, *args, **kwargs):
 
     actions = [
         rviz,
+        # TimerAction(
+        #     period=1.0,
+        #     actions=[
+        #         docking_tf_pose,
+        #         docking_tf_broadcaster,
+        #         TimerAction(period=3.0, actions=[nav2]),
+        #     ],
+        # ),
         TimerAction(
-            period=1.0, actions=[localization, TimerAction(period=3.0, actions=[nav2])]
+            period=0.0,
+            actions=[docking_tf_pose, docking_tf_broadcaster],
         ),
     ]
 

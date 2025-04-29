@@ -66,7 +66,7 @@ ARGUMENTS = [
 
 ROBOT_LIST = [
     {"name": "rb_0", "x": "0.0", "y": "0.0", "z": "0.3", "yaw": "0.0"},
-    {"name": "rb_1", "x": "2.0", "y": "0.0", "z": "0.3", "yaw": "0.0"},
+    # {"name": "rb_1", "x": "2.0", "y": "0.0", "z": "0.3", "yaw": "0.0"},
     # {"name": "rb_2", "x": "4.0", "y": "0.0", "z": "0.3", "yaw": "0.0"},
     # {"name": "rb_3", "x": "-2.0", "y": "0.0", "z": "0.3", "yaw": "0.0"},
     # {"name": "rb_4", "x": "-4.0", "y": "0.0", "z": "0.3", "yaw": "0.0"},
@@ -196,16 +196,6 @@ def launch_setup(context, *args, **kwargs):
             ],
             remappings=[(f"/model/{namespace}/robot/pose", f"/{namespace}/ign_tf")],
         )
-        
-        # 保存位姿
-        save_pose = Node(
-            namespace=namespace,
-            package="task_communication",
-            executable="record_pose",
-            name=f"record_pose",
-            # output="screen",
-            remappings=[(f"/tf", f"ign_tf")],
-        )
 
         # tf relay
         node_tf2_relay = Node(
@@ -240,7 +230,6 @@ def launch_setup(context, *args, **kwargs):
 
         append_nodes = [
             pose_bridge,
-            save_pose,
             node_scan_relay,
             node_tf2_relay,
             launch_ira_laser_tools_cmd,
