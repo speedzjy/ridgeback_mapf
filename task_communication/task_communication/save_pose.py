@@ -8,7 +8,7 @@ from geometry_msgs.msg import TransformStamped
 
 class TransformListenerNode(Node):
     def __init__(self):
-        super().__init__("record_pose_node")
+        super().__init__("save_pose_node")
 
         # 获取当前节点的namespace
         self.namespace = self.get_namespace().strip("/")

@@ -50,6 +50,9 @@ from launch.substitutions import (
 
 from launch_ros.actions import Node, PushRosNamespace, SetRemap
 
+from launch_ros.descriptions import ComposableNode, ParameterFile
+from nav2_common.launch import RewrittenYaml
+
 
 ARGUMENTS = [
     DeclareLaunchArgument(
@@ -81,50 +84,31 @@ def launch_setup(context, *args, **kwargs):
 
     # Launch Configurations
     use_sim_time = LaunchConfiguration("use_sim_time")
-    map = LaunchConfiguration("map")
+    map_file = LaunchConfiguration("map")
 
     namespace = str(LaunchConfiguration("namespace").perform(context))
 
-    # file_parameters = PathJoinSubstitution(
-    #     [pkg_clearpath_nav2_demos, "config", "localization.yaml"]
-    # )
-
-    # launch_localization = PathJoinSubstitution(
-    #     [pkg_nav2_bringup, "launch/include", "localization_launch.py"]
-    # )
-
-    # localization = GroupAction(
-    #     [
-    #         PushRosNamespace(namespace),
-    #         IncludeLaunchDescription(
-    #             PythonLaunchDescriptionSource(launch_localization),
-    #             launch_arguments=[
-    #                 ("namespace", namespace),
-    #                 ("map", map),
-    #                 ("use_sim_time", use_sim_time),
-    #                 ("params_file", file_parameters),
-    #             ],
-    #         ),
-    #     ]
-    # )
-
-    # gps
-    docking_tf_pose = Node(
-        namespace=namespace,
-        package="docking_tf",
-        executable="docking_tf_pose",
-        name="docking_tf_pose",
-        output="screen",
-        remappings=[("/tf", "ign_tf")],
+    file_parameters = PathJoinSubstitution(
+        [pkg_clearpath_nav2_demos, "config", "localization.yaml"]
     )
 
-    docking_tf_broadcaster = Node(
-        namespace=namespace,
-        package="docking_tf",
-        executable="docking_tf_broadcaster",
-        name="docking_tf_broadcaster",
-        output="screen",
-        remappings=[("/tf", "tf")],
+    launch_localization = PathJoinSubstitution(
+        [pkg_nav2_bringup, "launch/include", "localization_launch.py"]
+    )
+
+    localization = GroupAction(
+        [
+            PushRosNamespace(namespace),
+            IncludeLaunchDescription(
+                PythonLaunchDescriptionSource(launch_localization),
+                launch_arguments=[
+                    ("namespace", namespace),
+                    ("map", map_file),
+                    ("use_sim_time", use_sim_time),
+                    ("params_file", file_parameters),
+                ],
+            ),
+        ]
     )
 
     # nav
@@ -157,35 +141,13 @@ def launch_setup(context, *args, **kwargs):
         ]
     )
 
-    # rviz
-    config_rviz = PathJoinSubstitution(
-        [pkg_clearpath_nav2_demos, "rviz", "single_nav2.rviz"]
-    )
-    rviz = Node(
-        namespace=namespace,
-        package="rviz2",
-        executable="rviz2",
-        name="rviz2",
-        arguments=["-d", config_rviz],
-        parameters=[{"use_sim_time": LaunchConfiguration("use_sim_time")}],
-        remappings=[("/tf", "tf"), ("/tf_static", "tf_static")],
-        output="screen",
-        condition=IfCondition(LaunchConfiguration("use_rviz")),
-    )
-
     actions = [
-        rviz,
-        # TimerAction(
-        #     period=1.0,
-        #     actions=[
-        #         docking_tf_pose,
-        #         docking_tf_broadcaster,
-        #         TimerAction(period=3.0, actions=[nav2]),
-        #     ],
-        # ),
         TimerAction(
             period=0.0,
-            actions=[docking_tf_pose, docking_tf_broadcaster],
+            actions=[
+                localization,
+                TimerAction(period=1.0, actions=[nav2]),
+            ],
         ),
     ]
 

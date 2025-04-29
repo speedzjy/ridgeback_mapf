@@ -57,11 +57,6 @@ ARGUMENTS = [
         choices=["true", "false"],
         description="Use sim time",
     ),
-    DeclareLaunchArgument(
-        "init_setup_path",
-        default_value=[EnvironmentVariable("HOME"), "/clearpath/"],
-        description="Clearpath setup path",
-    ),
 ]
 
 
@@ -71,7 +66,6 @@ def launch_setup(context, *args, **kwargs):
 
     # Launch Configurations
     use_sim_time = LaunchConfiguration("use_sim_time")
-    setup_path = LaunchConfiguration("init_setup_path")
 
     launch_localization = PathJoinSubstitution(
         [pkg_clearpath_nav2_demos, "launch/localization", "localization.launch.py"]
@@ -80,8 +74,8 @@ def launch_setup(context, *args, **kwargs):
     delay = 5.0
     actions = []
 
-    # robot_list = ["rb_0", "rb_1"]
-    robot_list = ["rb_0"]
+    robot_list = ["rb_0", "rb_1"]
+    # robot_list = ["rb_0"]
     for i, robot in enumerate(robot_list):
         localization = IncludeLaunchDescription(
             PythonLaunchDescriptionSource(launch_localization),
@@ -92,8 +86,7 @@ def launch_setup(context, *args, **kwargs):
             ],
         )
         actions.append(TimerAction(period=delay * i, actions=[localization]))
-    
-    
+
     # multi_rviz
     config_rviz = PathJoinSubstitution(
         [pkg_clearpath_nav2_demos, "rviz", "multi_nav2.rviz"]
@@ -106,7 +99,7 @@ def launch_setup(context, *args, **kwargs):
         parameters=[{"use_sim_time": LaunchConfiguration("use_sim_time")}],
         # output="screen"
     )
-    # actions.append(rviz)
+    actions.append(rviz)
 
     return actions
 

@@ -1,78 +1,70 @@
 import rclpy
 from rclpy.node import Node
-from rclpy.clock import Clock, ClockType
-from rclpy.parameter import Parameter
 from geometry_msgs.msg import PoseWithCovarianceStamped
-import rclpy.time
-import rclpy.timer
-import tf2_ros
-from tf2_ros import TransformException
+from tf2_msgs.msg import TFMessage
+from rclpy.time import Time
 
 
-class AmclPoseTfPublisher(Node):
+class RawTfToPosePublisher(Node):
     def __init__(self):
-        super().__init__("amcl_pose_tf_publisher")
-        self.set_parameters([Parameter("use_sim_time", Parameter.Type.BOOL, True)])
+        super().__init__('raw_tf_to_pose_publisher')
+        self.namespace = self.get_namespace()
 
-        # 声明参数
-        self.declare_parameter("sub_global_frame_id", "warehouse")
-        self.declare_parameter("sub_base_link", "rb_0/robot")
+        self.declare_parameter('sub_global_frame_id', 'warehouse')
+        self.declare_parameter('sub_base_link', f'{self.namespace}/robot')
 
-        self.sub_global_frame_id = (
-            self.get_parameter("sub_global_frame_id").get_parameter_value().string_value
+        self.sub_global_frame_id = self.get_parameter('sub_global_frame_id').get_parameter_value().string_value
+        self.sub_base_link = self.get_parameter('sub_base_link').get_parameter_value().string_value
+
+        # 订阅 /tf
+        self.tf_sub = self.create_subscription(
+            TFMessage,
+            '/tf',
+            self.tf_callback,
+            10
         )
-        self.sub_base_link = (
-            self.get_parameter("sub_base_link").get_parameter_value().string_value
-        )
 
-        # TF Buffer 和 Listener
-        self.tf_buffer = tf2_ros.Buffer()
-        self.tf_listener = tf2_ros.TransformListener(self.tf_buffer, self)
-
-        # 发布器
+        # 发布 pose
         self.pose_pub = self.create_publisher(
-            PoseWithCovarianceStamped, "amcl_pose_tf", 5
+            PoseWithCovarianceStamped,
+            'amcl_pose_tf',
+            10
         )
 
-        # 定时器，10Hz频率查询
-        self.timer = self.create_timer(0.02, self.timer_callback)
+    def tf_callback(self, msg: TFMessage):
+        for transform in msg.transforms:
+            parent = transform.header.frame_id.strip('/')
+            child = transform.child_frame_id.strip('/')
+        
+            if parent == self.sub_global_frame_id.strip('/') and child == self.sub_base_link.strip('/'):
+                pose_msg = PoseWithCovarianceStamped()
+                pose_msg.header.stamp = transform.header.stamp
+                pose_msg.header.frame_id = "map"  # 或 self.sub_global_frame_id
 
-    def timer_callback(self):
-        try:
-            trans = self.tf_buffer.lookup_transform(
-                self.sub_global_frame_id,
-                self.sub_base_link,
-                # self.get_clock().now().to_msg(),
-                timeout=rclpy.duration.Duration(seconds=0.2),
-            )
+                # 位置
+                pose_msg.pose.pose.position.x = transform.transform.translation.x
+                pose_msg.pose.pose.position.y = transform.transform.translation.y
+                pose_msg.pose.pose.position.z = transform.transform.translation.z
 
-            pose_msg = PoseWithCovarianceStamped()
-            pose_msg.header.stamp = trans.header.stamp
-            pose_msg.header.frame_id = "map"
+                # 姿态
+                pose_msg.pose.pose.orientation.x = transform.transform.rotation.x
+                pose_msg.pose.pose.orientation.y = transform.transform.rotation.y
+                pose_msg.pose.pose.orientation.z = transform.transform.rotation.z
+                pose_msg.pose.pose.orientation.w = transform.transform.rotation.w
 
-            # 填充位置
-            pose_msg.pose.pose.position.x = trans.transform.translation.x
-            pose_msg.pose.pose.position.y = trans.transform.translation.y
-            pose_msg.pose.pose.position.z = trans.transform.translation.z
 
-            # 填充姿态
-            pose_msg.pose.pose.orientation = trans.transform.rotation
-
-            self.pose_pub.publish(pose_msg)
-
-        except TransformException as ex:
-            self.get_logger().warn(
-                f"Cannot transform {self.sub_global_frame_id} -> {self.sub_base_link}: {ex}"
-            )
+                self.pose_pub.publish(pose_msg)
+                self.get_logger().debug(f'Published pose from {parent} -> {child}')
+                break  # 一旦找到匹配的变换就跳出
 
 
 def main(args=None):
     rclpy.init(args=args)
-    node = AmclPoseTfPublisher()
+    node = RawTfToPosePublisher()
     rclpy.spin(node)
     node.destroy_node()
     rclpy.shutdown()
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()
