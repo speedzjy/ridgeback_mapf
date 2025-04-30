@@ -91,7 +91,7 @@ def launch_setup(context, *args, **kwargs):
     actions.extend([gz_sim_cmd])
 
     delay_after_gz_sim = 5.0
-    delay_between_robots = 4.0
+    delay_between_robots = 5.0
     delay_spawn_robot = 1.0
     delay_laser_tools = 3.0
     for robot_index, robot in enumerate(ROBOT_LIST):

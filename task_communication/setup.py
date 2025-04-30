@@ -26,6 +26,7 @@ setup(
             "platform_communication = task_communication.platform_communication:main",
             "save_pose = task_communication.save_pose:main",
             "rb_record_pose = task_communication.rb_record_pose:main",
+            "fake_navigation_in = task_communication.fake_navigation_in:main",
         ],
     },
 )

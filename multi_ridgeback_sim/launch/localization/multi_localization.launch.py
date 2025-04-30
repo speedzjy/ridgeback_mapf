@@ -71,7 +71,7 @@ def launch_setup(context, *args, **kwargs):
         [pkg_clearpath_nav2_demos, "launch/localization", "localization.launch.py"]
     )
 
-    delay = 5.0
+    delay = 7.0
     actions = []
 
     robot_list = ["rb_0", "rb_1"]

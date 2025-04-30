@@ -4,9 +4,11 @@ Panels:
     Name: Displays
     Property Tree Widget:
       Expanded:
+        - /rb_01/Global Planner1
+        - /rb_01/Global Planner1/Global Costmap1
         - /rb_01/Controller1/Local Plan1
       Splitter Ratio: 0.5833333134651184
-    Tree Height: 445
+    Tree Height: 615
   - Class: rviz_common/Selection
     Name: Selection
   - Class: rviz_common/Tool Properties
@@ -25,7 +27,7 @@ Visualization Manager:
   Class: ""
   Displays:
     - Alpha: 0.5
-      Cell Size: 1
+      Cell Size: 1.5
       Class: rviz_default_plugins/Grid
       Color: 160; 160; 164
       Enabled: true
@@ -48,6 +50,27 @@ Visualization Manager:
       Name: map
       Radius: 0.10000000149011612
       Reference Frame: map
+      Value: true
+    - Alpha: 0.6000000238418579
+      Class: rviz_default_plugins/Map
+      Color Scheme: map
+      Draw Behind: true
+      Enabled: true
+      Name: MapfMap
+      Topic:
+        Depth: 1
+        Durability Policy: Transient Local
+        Filter size: 10
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /mapf_base/map
+      Update Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /mapf_base/map_updates
+      Use Timestamp: false
       Value: true
     - Alpha: 0.6000000238418579
       Class: rviz_default_plugins/Map
@@ -90,116 +113,6 @@ Visualization Manager:
             Expand Link Details: false
             Expand Tree: false
             Link Tree Style: Links in Alphabetic Order
-            axle_link:
-              Alpha: 1
-              Show Axes: false
-              Show Trail: false
-              Value: true
-            base_link:
-              Alpha: 1
-              Show Axes: false
-              Show Trail: false
-            chassis_link:
-              Alpha: 1
-              Show Axes: false
-              Show Trail: false
-              Value: true
-            default_mount:
-              Alpha: 1
-              Show Axes: false
-              Show Trail: false
-            front_cover_link:
-              Alpha: 1
-              Show Axes: false
-              Show Trail: false
-              Value: true
-            front_left_wheel_link:
-              Alpha: 1
-              Show Axes: false
-              Show Trail: false
-              Value: true
-            front_lights_link:
-              Alpha: 1
-              Show Axes: false
-              Show Trail: false
-              Value: true
-            front_right_wheel_link:
-              Alpha: 1
-              Show Axes: false
-              Show Trail: false
-              Value: true
-            front_rocker_link:
-              Alpha: 1
-              Show Axes: false
-              Show Trail: false
-              Value: true
-            imu_0_link:
-              Alpha: 1
-              Show Axes: false
-              Show Trail: false
-            left_side_cover_link:
-              Alpha: 1
-              Show Axes: false
-              Show Trail: false
-              Value: true
-            lidar2d_0_laser:
-              Alpha: 1
-              Show Axes: false
-              Show Trail: false
-            lidar2d_0_link:
-              Alpha: 1
-              Show Axes: false
-              Show Trail: false
-              Value: true
-            lidar2d_1_laser:
-              Alpha: 1
-              Show Axes: false
-              Show Trail: false
-            lidar2d_1_link:
-              Alpha: 1
-              Show Axes: false
-              Show Trail: false
-              Value: true
-            rear_cover_link:
-              Alpha: 1
-              Show Axes: false
-              Show Trail: false
-              Value: true
-            rear_left_wheel_link:
-              Alpha: 1
-              Show Axes: false
-              Show Trail: false
-              Value: true
-            rear_lights_link:
-              Alpha: 1
-              Show Axes: false
-              Show Trail: false
-              Value: true
-            rear_right_wheel_link:
-              Alpha: 1
-              Show Axes: false
-              Show Trail: false
-              Value: true
-            rear_rocker_link:
-              Alpha: 1
-              Show Axes: false
-              Show Trail: false
-              Value: true
-            right_side_cover_link:
-              Alpha: 1
-              Show Axes: false
-              Show Trail: false
-              Value: true
-            riser_link:
-              Alpha: 1
-              Show Axes: false
-              Show Trail: false
-              Value: true
-            top_link:
-              Alpha: 1
-              Show Axes: false
-              Show Trail: false
-              Value: true
           Mass Properties:
             Inertia: false
             Mass: false
@@ -454,7 +367,7 @@ Visualization Manager:
               Value: true
           Enabled: true
           Name: Controller
-      Enabled: true
+      Enabled: false
       Name: rb_0
     - Class: rviz_common/Group
       Displays:
@@ -722,116 +635,6 @@ Visualization Manager:
             Expand Link Details: false
             Expand Tree: false
             Link Tree Style: Links in Alphabetic Order
-            axle_link:
-              Alpha: 1
-              Show Axes: false
-              Show Trail: false
-              Value: true
-            base_link:
-              Alpha: 1
-              Show Axes: false
-              Show Trail: false
-            chassis_link:
-              Alpha: 1
-              Show Axes: false
-              Show Trail: false
-              Value: true
-            default_mount:
-              Alpha: 1
-              Show Axes: false
-              Show Trail: false
-            front_cover_link:
-              Alpha: 1
-              Show Axes: false
-              Show Trail: false
-              Value: true
-            front_left_wheel_link:
-              Alpha: 1
-              Show Axes: false
-              Show Trail: false
-              Value: true
-            front_lights_link:
-              Alpha: 1
-              Show Axes: false
-              Show Trail: false
-              Value: true
-            front_right_wheel_link:
-              Alpha: 1
-              Show Axes: false
-              Show Trail: false
-              Value: true
-            front_rocker_link:
-              Alpha: 1
-              Show Axes: false
-              Show Trail: false
-              Value: true
-            imu_0_link:
-              Alpha: 1
-              Show Axes: false
-              Show Trail: false
-            left_side_cover_link:
-              Alpha: 1
-              Show Axes: false
-              Show Trail: false
-              Value: true
-            lidar2d_0_laser:
-              Alpha: 1
-              Show Axes: false
-              Show Trail: false
-            lidar2d_0_link:
-              Alpha: 1
-              Show Axes: false
-              Show Trail: false
-              Value: true
-            lidar2d_1_laser:
-              Alpha: 1
-              Show Axes: false
-              Show Trail: false
-            lidar2d_1_link:
-              Alpha: 1
-              Show Axes: false
-              Show Trail: false
-              Value: true
-            rear_cover_link:
-              Alpha: 1
-              Show Axes: false
-              Show Trail: false
-              Value: true
-            rear_left_wheel_link:
-              Alpha: 1
-              Show Axes: false
-              Show Trail: false
-              Value: true
-            rear_lights_link:
-              Alpha: 1
-              Show Axes: false
-              Show Trail: false
-              Value: true
-            rear_right_wheel_link:
-              Alpha: 1
-              Show Axes: false
-              Show Trail: false
-              Value: true
-            rear_rocker_link:
-              Alpha: 1
-              Show Axes: false
-              Show Trail: false
-              Value: true
-            right_side_cover_link:
-              Alpha: 1
-              Show Axes: false
-              Show Trail: false
-              Value: true
-            riser_link:
-              Alpha: 1
-              Show Axes: false
-              Show Trail: false
-              Value: true
-            top_link:
-              Alpha: 1
-              Show Axes: false
-              Show Trail: false
-              Value: true
           Mass Properties:
             Inertia: false
             Mass: false
@@ -840,7 +643,7 @@ Visualization Manager:
           Update Interval: 0
           Value: true
           Visual Enabled: true
-      Enabled: true
+      Enabled: false
       Name: rb_1
   Enabled: true
   Global Options:
@@ -894,7 +697,7 @@ Visualization Manager:
   Value: true
   Views:
     Current:
-      Angle: -1.5700002908706665
+      Angle: 1.5649983882904053
       Class: rviz_default_plugins/TopDownOrtho
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
@@ -904,27 +707,27 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Scale: 79.48775482177734
+      Scale: -32.39485549926758
       Target Frame: <Fixed Frame>
       Value: TopDownOrtho (rviz_default_plugins)
-      X: -0.33906352519989014
-      Y: -1.3337911367416382
+      X: 0.1339864730834961
+      Y: 0.05719484016299248
     Saved: ~
 Window Geometry:
   Displays:
     collapsed: false
-  Height: 1020
+  Height: 1363
   Hide Left Dock: false
   Hide Right Dock: false
   Navigation 2:
     collapsed: false
-  QMainWindow State: 000000ff00000000fd00000004000000000000019d000003a0fc0200000009fb0000001200530065006c0065006300740069006f006e000000004b000000890000006100fffffffb000000120056006900650077007300200054006f006f02000001df000002110000018500000122fb000000200054006f006f006c002000500072006f0070006500720074006900650073003203000002880000011d000002210000017afc0000003f00000218000000f10100001dfa000000010100000002fb0000001e0054006f006f006c002000500072006f00700065007200740069006500730100000000ffffffff0000009300fffffffb000000100044006900730070006c0061007900730100000000000002bf0000015600fffffffb0000002000730065006c0065006300740069006f006e00200062007500660066006500720200000138000000aa0000023a00000294fb00000014005700690064006500530074006500720065006f02000000e6000000d2000003ee0000030bfb0000000c004b0069006e0065006300740200000186000001060000030c00000261fb00000018004e0061007600690067006100740069006f006e00200032010000025d000001820000013900fffffffb0000001e005200650061006c00730065006e0073006500430061006d00650072006100000002c6000000c1000000000000000000000001000001f5000004e7fc0200000003fb0000001e0054006f006f006c002000500072006f00700065007200740069006500730100000041000000780000000000000000fb0000000a00560069006500770073000000004b000004e7000000a900fffffffb0000001200530065006c0065006300740069006f006e010000025a000000b200000000000000000000000200000490000000a9fc0100000001fb0000000a00560069006500770073030000004e00000080000002e10000019700000003000004420000003efc0100000002fb0000000800540069006d00650100000000000004420000000000000000fb0000000800540069006d00650100000000000004500000000000000000000005dd000003a000000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
+  QMainWindow State: 000000ff00000000fd000000040000000000000305000004e7fc0200000009fb0000001200530065006c0065006300740069006f006e000000004b000000890000007c00fffffffb000000120056006900650077007300200054006f006f02000001df000002110000018500000122fb000000200054006f006f006c002000500072006f0070006500720074006900650073003203000002880000011d000002210000017afc0000004b000002d60000013501000025fa000000010100000002fb0000001e0054006f006f006c002000500072006f00700065007200740069006500730100000000ffffffff000000b500fffffffb000000100044006900730070006c0061007900730100000000000002bf0000016700fffffffb0000002000730065006c0065006300740069006f006e00200062007500660066006500720200000138000000aa0000023a00000294fb00000014005700690064006500530074006500720065006f02000000e6000000d2000003ee0000030bfb0000000c004b0069006e0065006300740200000186000001060000030c00000261fb00000018004e0061007600690067006100740069006f006e002000320100000329000002090000017a00fffffffb0000001e005200650061006c00730065006e0073006500430061006d00650072006100000002c6000000c1000000000000000000000001000001f5000004e7fc0200000003fb0000001e0054006f006f006c002000500072006f00700065007200740069006500730100000041000000780000000000000000fb0000000a00560069006500770073000000004b000004e7000000d400fffffffb0000001200530065006c0065006300740069006f006e010000025a000000b200000000000000000000000200000490000000a9fc0100000001fb0000000a00560069006500770073030000004e00000080000002e10000019700000003000004420000003efc0100000002fb0000000800540069006d00650100000000000004420000000000000000fb0000000800540069006d00650100000000000004500000000000000000000006f3000004e700000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
   Selection:
     collapsed: false
   Tool Properties:
     collapsed: false
   Views:
     collapsed: false
-  Width: 1920
+  Width: 2560
   X: 1080
-  Y: 575
+  Y: 40

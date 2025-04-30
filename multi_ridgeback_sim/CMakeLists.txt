@@ -31,7 +31,7 @@ install(TARGETS scan_frame_relay DESTINATION lib/${PROJECT_NAME})
 
 # others
 install(
-  DIRECTORY config launch worlds rviz
+  DIRECTORY config launch worlds rviz maps
   DESTINATION share/${PROJECT_NAME}
 )
 
