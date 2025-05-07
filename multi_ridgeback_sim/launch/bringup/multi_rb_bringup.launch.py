@@ -184,7 +184,7 @@ def launch_setup(context, *args, **kwargs):
             output="screen",
         )
 
-        # 位姿映射
+        # pose remapping
         pose_bridge = Node(
             namespace=namespace,
             package="ros_gz_bridge",
@@ -248,8 +248,7 @@ def launch_setup(context, *args, **kwargs):
                 )
             )
 
-            # 启动gazebo后过delay_after_gz_sim秒后加载参数
-            # 加载参数过1s spwan robot
+            # time delay
             actions.extend(
                 [
                     TimerAction(
@@ -266,7 +265,7 @@ def launch_setup(context, *args, **kwargs):
                 ]
             )
         else:
-            # laser存在命名空间覆盖问题
+            # prevent naming conflicts in a namespace.
             event_generate_last_action = RegisterEventHandler(
                 event_handler=OnProcessExit(
                     target_action=last_action,

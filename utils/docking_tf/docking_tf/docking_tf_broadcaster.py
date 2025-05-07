@@ -15,13 +15,11 @@ class AmclTfBroadcaster(Node):
         super().__init__("amcl_tf_broadcaster")
         self.set_parameters([Parameter("use_sim_time", Parameter.Type.BOOL, True)])
 
-        # 创建 TransformBroadcaster
         self.tf_broadcaster = tf2_ros.TransformBroadcaster(self)
 
-        # 订阅 amcl_pose_tf
         self.subscription = self.create_subscription(
             PoseWithCovarianceStamped,
-            "amcl_pose_tf",  # 如果话题名不同，请修改这里
+            "amcl_pose_tf",
             self.amcl_pose_callback,
             10,
         )
@@ -30,7 +28,7 @@ class AmclTfBroadcaster(Node):
             TFMessage,
             "/tf",
             self.tf_callback,
-            10,  # tf频率通常较高，可以设大点
+            50,
         )
 
         self.latest_odom_to_base = None
@@ -56,7 +54,6 @@ class AmclTfBroadcaster(Node):
         if self.latest_amcl_pose is None or self.latest_odom_to_base is None:
             return
 
-        
         # 获取 amcl_pose 的 map->base_link 变换
         pose = self.latest_amcl_pose.pose.pose
 
@@ -82,7 +79,6 @@ class AmclTfBroadcaster(Node):
             self.latest_odom_to_base.transform.rotation.w,
         )
 
-        
         # 计算 map -> odom = map->base_link * inverse(odom->base_link)
         try:
             base_to_odom = tf_transformations.inverse_matrix(odom_to_base)
@@ -90,7 +86,6 @@ class AmclTfBroadcaster(Node):
             self.get_logger().warn(f"Matrix inversion failed: {e}")
             return
 
-        
         map_to_odom = np.matmul(map_to_base, base_to_odom)
         translation = map_to_odom[:3, 3]
         rotation = tf_transformations.quaternion_from_matrix(map_to_odom)

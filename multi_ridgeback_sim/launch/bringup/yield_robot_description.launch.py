@@ -157,13 +157,15 @@ def launch_setup(context, *args, **kwargs):
                 )
             )
 
-            actions.extend([
-                event_generate_last_action,
-                event_generate_description,
-                event_generate_semantic_description,
-                event_generate_launch,
-            ])
-        
+            actions.extend(
+                [
+                    event_generate_last_action,
+                    event_generate_description,
+                    event_generate_semantic_description,
+                    event_generate_launch,
+                ]
+            )
+
         last_action = node_generate_param
 
     return actions

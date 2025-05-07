@@ -15,8 +15,10 @@ from launch_ros.substitutions import FindPackageShare
 ARGUMENTS = [
     DeclareLaunchArgument(
         "station_pose_path",
-        default_value=[PathJoinSubstitution(
-            [FindPackageShare("task_communication"), "station_cfg", "station.json"])
+        default_value=[
+            PathJoinSubstitution(
+                [FindPackageShare("task_communication"), "station_cfg", "station.json"]
+            )
         ],
         description="Path to the station pose file",
     ),
@@ -29,7 +31,6 @@ ARGUMENTS = [
 
 
 def launch_setup(context, *args, **kwargs):
-    # 获取 `task_communication` 包中的 station.json 文件路径
     station_pose_path = LaunchConfiguration("station_pose_path")
     namespace = LaunchConfiguration("namespace")
 
