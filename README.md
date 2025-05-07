@@ -35,6 +35,44 @@ colcon build --symlink-install
 # Run
 
 ## quick start
+
+- robot yaml prepare
+
+Create a clearpath folder in the home directory (~) along with subfolders for each robot. Place the following robot configuration file named robot.yaml in each subfolder. Note that the `ros2:namespace `field in the configuration file must follow the format rb_ followed by a number (e.g., rb_0, rb_1).
+
+```
+serial_number: r100-0000
+version: 0
+system:
+  hosts:
+    - hostname: cpr-r100-0000
+      ip: 192.168.131.1
+  ros2:
+    namespace: rb_0
+sensors:
+  lidar2d:
+    - model: sick_lms1xx
+      parent: chassis_link
+      xyz: [0.3455, 0.0, 0.1977]
+    - model: sick_lms1xx
+      parent: chassis_link
+      xyz: [-0.3455, 0.0, 0.1977]
+      rpy: [0.0, 0.0, 3.14159]
+
+```
+
+Directory structure is as follows:
+```
+$ tree -L 3
+.
+|-- clearpath
+|   |-- rb_0
+|   |   `-- robot.yaml
+|   |-- rb_1
+|   |   `-- robot.yaml
+```
+
+
 - bringup
 ```
 ros2 launch multi_ridgeback_sim multi_rb_bringup.launch.py
@@ -82,6 +120,11 @@ ros2 launch multi_ridgeback_sim multi_rb_bringup.launch.py
 ros2 launch multi_ridgeback_sim cartographer.launch.py
 ``` 
 
+Save the map:
+```
+ros2 service call /rb_0/finish_trajectory cartographer_ros_msgs/srv/FinishTrajectory "{trajectory_id: 0}"
+ros2 run nav2_map_server map_saver_cli -t /rb_0/map -f mymap
+```
 
 
 **Notes:**

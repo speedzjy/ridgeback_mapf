@@ -35,6 +35,42 @@ colcon build --symlink-install
 # Run
 
 ## 快速开始
+- 参数文件准备
+
+在根目录(~)下创建clearpath文件夹和各机器人子文件夹，并将以下机器人配置文件命名为robot.yaml放入各子文件夹，其中，配置文件的ros2:namespace字段需要以rb_加上数字 (例如, rb_0, rb_1).
+
+```
+serial_number: r100-0000
+version: 0
+system:
+  hosts:
+    - hostname: cpr-r100-0000
+      ip: 192.168.131.1
+  ros2:
+    namespace: rb_0
+sensors:
+  lidar2d:
+    - model: sick_lms1xx
+      parent: chassis_link
+      xyz: [0.3455, 0.0, 0.1977]
+    - model: sick_lms1xx
+      parent: chassis_link
+      xyz: [-0.3455, 0.0, 0.1977]
+      rpy: [0.0, 0.0, 3.14159]
+
+```
+
+目录树结构如下:
+```
+$ tree -L 3
+.
+|-- clearpath
+|   |-- rb_0
+|   |   `-- robot.yaml
+|   |-- rb_1
+|   |   `-- robot.yaml
+```
+
 - 启动
 ```
 ros2 launch multi_ridgeback_sim multi_rb_bringup.launch.py
@@ -81,7 +117,11 @@ ros2 launch multi_ridgeback_sim multi_rb_bringup.launch.py
 ros2 launch multi_ridgeback_sim cartographer.launch.py
 ``` 
 
-
+保存地图:
+```
+ros2 service call /rb_0/finish_trajectory cartographer_ros_msgs/srv/FinishTrajectory "{trajectory_id: 0}"
+ros2 run nav2_map_server map_saver_cli -t /rb_0/map -f mymap
+```
 
 **注意:**
 
