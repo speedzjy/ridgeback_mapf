@@ -37,7 +37,7 @@ colcon build --symlink-install
 ## 快速开始
 - 参数文件准备
 
-在根目录(~)下创建clearpath文件夹和各机器人子文件夹，并将以下机器人配置文件命名为robot.yaml放入各子文件夹，其中，配置文件的ros2:namespace字段需要以rb_加上数字 (例如, rb_0, rb_1).
+在根目录(~)下创建clearpath文件夹和各机器人子文件夹，并将以下机器人配置文件命名为 `robot.yaml` 放入各子文件夹，其中，配置文件的 `ros2:namespace` 字段需要以 `rb_` 加上数字 (例如, `rb_0`, `rb_1`).
 
 ```
 serial_number: r100-0000
@@ -70,6 +70,12 @@ $ tree -L 3
 |   |-- rb_1
 |   |   `-- robot.yaml
 ```
+
+然后生成配置文件:
+```
+ros2 launch multi_ridgeback_sim yield_robot_description.launch.py
+```
+
 
 - 启动
 ```

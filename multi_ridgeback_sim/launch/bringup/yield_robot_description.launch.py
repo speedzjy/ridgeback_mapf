@@ -48,7 +48,7 @@ ARGUMENTS = [
     ),
 ]
 
-ROBOT_LIST = [f"rb_{i}" for i in range(0, 5)]
+ROBOT_LIST = [f"rb_{i}" for i in range(0, 2)]
 
 
 def launch_setup(context, *args, **kwargs):

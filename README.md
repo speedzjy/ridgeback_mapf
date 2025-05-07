@@ -38,7 +38,7 @@ colcon build --symlink-install
 
 - robot yaml prepare
 
-Create a clearpath folder in the home directory (~) along with subfolders for each robot. Place the following robot configuration file named robot.yaml in each subfolder. Note that the `ros2:namespace `field in the configuration file must follow the format rb_ followed by a number (e.g., rb_0, rb_1).
+Create a clearpath folder in the home directory (~) along with subfolders for each robot. Place the following robot configuration file named `robot.yaml` in each subfolder. Note that the `ros2:namespace `field in the configuration file must follow the format `rb_` followed by a number (e.g., `rb_0`, `rb_1`).
 
 ```
 serial_number: r100-0000
@@ -72,6 +72,10 @@ $ tree -L 3
 |   |   `-- robot.yaml
 ```
 
+then generate files:
+```
+ros2 launch multi_ridgeback_sim yield_robot_description.launch.py
+```
 
 - bringup
 ```
