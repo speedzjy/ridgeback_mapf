@@ -5,7 +5,7 @@
   <version>0.0.0</version>
   <description>TODO: Package description</description>
   <maintainer email="speed@mail.ustc.edu.cn">speed</maintainer>
-  <license>Apache-2.0</license>
+  <license>BSD-3-Clause</license>
 
   <depend>rclpy</depend>
   <depend>tf2_ros</depend>
