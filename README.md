@@ -1,5 +1,5 @@
 <div align='center'>
-  <img src='./doc/logo.jpg'/>
+  <img src='./doc/ridgeback_demo.gif'/>
 </div>
 
 <div align='center'>
